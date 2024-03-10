@@ -16,7 +16,7 @@ services:
       - VERSION=docker
       - NVIDIA_VISIBLE_DEVICES=all
     volumes:
-      - ${PLEX_CONF:-./plex/}:/config
+      - ${CONF_ROOT:-.}/plex:/config
       - ${MEDIA_ROOT}/TV Shows:/tv
       - ${MEDIA_ROOT}/Movies:/movies
       - ${MEDIA_ROOT}/Music:/music
@@ -28,7 +28,7 @@ services:
       - PGID=1001
       - TZ=${TZ:-America/Los_Angeles}
     volumes:
-      - ${TAUTULLI_CONF:-./tautulli/}:/config
+      - ${CONF_ROOT:-.}/tautulli:/config
     ports:
       - ${TAUTULLI_UI:-8181}:8181
     restart: unless-stopped
