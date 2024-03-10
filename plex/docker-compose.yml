@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: host
+    deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            capabilities: [gpu]
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=${TZ:America/Los_Angeles}
+      - VERSION=docker
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ${PLEX_CONF:-./plex/}:/config
+      - ${MEDIA_ROOT}/TV Shows:/tv
+      - ${MEDIA_ROOT}/Movies:/movies
+      - ${MEDIA_ROOT}/Music:/music
+    restart: unless-stopped
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=${TZ:America/Los_Angeles}
+    volumes:
+      - ${TAUTULLI_CONF:-./tautulli/}:/config
+    ports:
+      - ${TAUTULLI_UI:8181}:8181
+    restart: unless-stopped
